@@ -21,6 +21,10 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sub)
         //SubActivityが開いたら
+        //MainActivityから渡された問題数を画面に表示させる
+        val bundle = intent.extras
+        val nunberBox: Int = bundle.getInt("mondaisuu")     //MainActivityのputExtra情報を識別する("キー"
+        txv_remaining.text = nunberBox.toString()
 
 
         //こたえあわせボタンが押されたら
