@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
     <string name="app_name">数字クイズ</string>
+    <!-- プルダウン選択肢 -->
+    <string-array name="numberOfQuestion">
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
 </resources>
