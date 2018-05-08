@@ -20,6 +20,12 @@ import java.util.*
 
 class SubActivity : AppCompatActivity(), View.OnClickListener {
 
+    //残り問題数
+    var nokorimondaisuu: Int = 0
+    //正解数
+    var correctNumber: Int = 0
+    
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +35,8 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
         val bundle = intent.extras
         val nunberBox: Int = bundle.getInt("mondaisuu")     //MainActivityのputExtra情報を識別する("キー"
         txv_remaining.text = nunberBox.toString()
+        nokorimondaisuu = nunberBox
+        correctNumber = 0
 
 
         //こたえあわせボタンが押されたら
@@ -107,6 +115,52 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
     //こたえあわせ処理をするメソッド
     //こたえあわせの処理(answerCheckメソッド)
     private fun answerCheck() {
+
+//        ・もどる、こたえあわせ、数字ボタンを使えなくする
+        btn_back.isEnabled = false
+        btn_ansCheck.isEnabled = false
+        button0.isEnabled = false
+        button1.isEnabled = false
+        button2.isEnabled = false
+        button3.isEnabled = false
+        button4.isEnabled = false
+        button5.isEnabled = false
+        button6.isEnabled = false
+        button7.isEnabled = false
+        button8.isEnabled = false
+        button9.isEnabled = false
+        buttonMinus.isEnabled = false
+        buttonClear.isEnabled = false
+
+//        ・残り問題数を一つ減らして表示させる
+        nokorimondaisuu -= 1
+        txv_remaining.text = nokorimondaisuu.toString()
+//        ・○、×画像を見えるようにする
+        imageView_maru.visibility = View.VISIBLE
+//        ・自分の入力した数字と問題の答えと比較する(if文)
+        //自分の答え
+        val myAnswer: Int = txv_answer.text.toString().toInt()
+        //本当の答え
+        val realAnswer: Int = if (txv_enzanshi.text == "+"){        //計算が＋だったら
+            txv_left.text.toString().toInt() + txv_right.text.toString().toInt()    //左と右を足す
+        }else txv_left.text.toString().toInt() - txv_right.text.toString().toInt()       //それ以外(ー)だったら左から右を引く
+        //自分の答えと本当の答えを比較
+        if (myAnswer == realAnswer){        //同じ答えになった場合
+//        ・正解の場合→正解数を一つ増やす表示、◯画像の表示、正解音
+            correctNumber += 1
+            txv_correct.text = correctNumber.toString()
+            imageView.setImageResource(R.drawable.pic_correct)
+
+        }else{
+//        ・不正解の場合→×画像の表示、不正解音
+            imageView.setImageResource(R.drawable.pic_incorrect)
+        }
+
+//        ・正答率を計算して表示
+//        ・問題数がなくなって終了の時→
+//        　　　　　　　もどるボタン使える、こたえあわせボタン使えない、
+//        　　　　　　　テスト終了の表示
+//        ・問題数がある場合→１秒後に次の問題を出す
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
