@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.departure.numberquiz.SubActivity">
+    tools:context="com.example.departure.numberquiz.SubActivity"
+    tools:layout_editor_absoluteY="25dp">
 
     <TableLayout
         android:id="@+id/tableLayout"
@@ -300,11 +301,10 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="60sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/imageView_maru"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_maru"
+        app:layout_constraintStart_toStartOf="@+id/imageView_maru"
+        app:layout_constraintTop_toTopOf="@+id/imageView_maru" />
 
     <ImageView
         android:id="@+id/imageView_maru"
@@ -312,7 +312,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

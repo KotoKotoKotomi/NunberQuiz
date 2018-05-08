@@ -3,6 +3,7 @@ package com.example.departure.numberquiz
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.activity_sub.*
@@ -111,7 +112,25 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
 
     //ボタンが押された時にやることをかく
     //数字ボタンを押したら
-    override fun onClick(v: View?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onClick(v: View?) {    //vはButtonのこと
+//        ・数字ボタンを１文字ずつ表示
+
+
+        val button: Button = v as Button    //button(1〜9,-,c)   vをButton型に
+
+
+        when(v?.id){
+            //クリアボタンで消す
+            R.id.buttonClear -> txv_answer.text = ""
+            //一文字目にーをおす時は
+            R.id.buttonMinus -> if (txv_answer.text == "")      //先頭が空白""だった場合
+                                    txv_answer.text = "-"       //ーを押せる
+            //一文字目に０をおす時は
+            R.id.button0 -> if (txv_answer.text != "0" && txv_answer.text != "-")   //０じゃない　かつ　ーじゃない場合
+                txv_answer.append(button.text)                  //１〜９は押せる　appendは後ろにつける
+
+            //それ以外
+            else -> txv_answer.append(button.text)          //１〜９を後ろに足してく
+        }
     }
 }
