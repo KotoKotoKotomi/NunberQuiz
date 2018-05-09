@@ -1,5 +1,9 @@
 package com.example.departure.numberquiz
 
+import android.media.AudioAttributes
+import android.media.AudioManager
+import android.media.SoundPool
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -24,7 +28,12 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
     var nokorimondaisuu: Int = 0
     //正解数
     var correctNumber: Int = 0
-    
+    //音
+    lateinit var soundPool: SoundPool
+    //サウンドID初期化
+    var soundId1: Int = 0   //正解
+    var soundId2: Int = 0   //不正解
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +79,33 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
         question()
 
 
+    }
+
+    //画面が見える場所
+    override fun onResume() {
+        super.onResume()
+
+        //音の準備
+        soundPool = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1){
+            SoundPool.Builder().setAudioAttributes(AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .build())
+                    .setMaxStreams(1).build()
+        }else{
+            SoundPool(1,AudioManager.STREAM_MUSIC,0)
+        }
+
+        //音ファイルをロード
+        soundId1 = soundPool.load(this,R.raw.sound_correct,1)      //正解
+        soundId2 = soundPool.load(this,R.raw.sound_incorrect,1)    //不正解
+    }
+
+    //画面が見えなくなる場所
+    override fun onPause() {
+        super.onPause()
+
+        //音ファイルをメモリから消すrelease()メソッド
+        soundPool.release()
     }
 
     //問題を出す処理をするメソッド
@@ -133,7 +169,7 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
         buttonClear.isEnabled = false
 
 //        ・残り問題数を一つ減らして表示させる
-        nokorimondaisuu -= 1
+        nokorimondaisuu -= 1    //デクリメント
         txv_remaining.text = nokorimondaisuu.toString()
 //        ・○、×画像を見えるようにする
         imageView_maru.visibility = View.VISIBLE
@@ -144,16 +180,19 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
         val realAnswer: Int = if (txv_enzanshi.text == "+"){        //計算が＋だったら
             txv_left.text.toString().toInt() + txv_right.text.toString().toInt()    //左と右を足す
         }else txv_left.text.toString().toInt() - txv_right.text.toString().toInt()       //それ以外(ー)だったら左から右を引く
+
         //自分の答えと本当の答えを比較
         if (myAnswer == realAnswer){        //同じ答えになった場合
 //        ・正解の場合→正解数を一つ増やす表示、◯画像の表示、正解音
             correctNumber += 1
             txv_correct.text = correctNumber.toString()
-            imageView.setImageResource(R.drawable.pic_correct)
-
+            imageView_maru.setImageResource(R.drawable.pic_correct)
+            soundPool.play(soundId1,1.0f,1.0f,0,0,1.0f)
         }else{
 //        ・不正解の場合→×画像の表示、不正解音
-            imageView.setImageResource(R.drawable.pic_incorrect)
+            imageView_maru.setImageResource(R.drawable.pic_incorrect)
+            soundPool.play(soundId2,1.0f,1.0f,0,0,1.0f)
+
         }
 
 //        ・正答率を計算して表示
