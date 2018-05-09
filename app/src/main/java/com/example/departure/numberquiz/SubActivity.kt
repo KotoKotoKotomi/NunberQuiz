@@ -28,6 +28,8 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
     var nokorimondaisuu: Int = 0
     //正解数
     var correctNumber: Int = 0
+    //不正解数
+    var incorrectAnswer: Int = 0
     //音
     lateinit var soundPool: SoundPool
     //サウンドID初期化
@@ -189,13 +191,15 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
             imageView_maru.setImageResource(R.drawable.pic_correct)
             soundPool.play(soundId1,1.0f,1.0f,0,0,1.0f)
         }else{
-//        ・不正解の場合→×画像の表示、不正解音
+//        ・不正解の場合→×不正解数を一つ増やす、×画像の表示、不正解音
+            incorrectAnswer += 1
+            txv_incorrect.text = incorrectAnswer.toString()
             imageView_maru.setImageResource(R.drawable.pic_incorrect)
             soundPool.play(soundId2,1.0f,1.0f,0,0,1.0f)
 
         }
 
-//        ・正答率を計算して表示
+
 //        ・問題数がなくなって終了の時→
 //        　　　　　　　もどるボタン使える、こたえあわせボタン使えない、
 //        　　　　　　　テスト終了の表示
