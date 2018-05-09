@@ -8,11 +8,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.activity_sub.*
-import java.lang.Math.random
 import java.util.*
+import kotlin.concurrent.schedule
 
 
 //SubActivityが開いたら
@@ -35,6 +33,8 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
     //サウンドID初期化
     var soundId1: Int = 0   //正解
     var soundId2: Int = 0   //不正解
+    //タイマー
+    lateinit var timer: Timer
 
 
 
@@ -44,9 +44,9 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
         //SubActivityが開いたら
         //MainActivityから渡された問題数を画面に表示させる
         val bundle = intent.extras
-        val nunberBox: Int = bundle.getInt("mondaisuu")     //MainActivityのputExtra情報を識別する("キー"
-        txv_remaining.text = nunberBox.toString()
-        nokorimondaisuu = nunberBox
+        val numberBox: Int = bundle.getInt("mondaisuu")     //MainActivityのputExtra情報を識別する("キー"
+        txv_remaining.text = numberBox.toString()
+        nokorimondaisuu = numberBox
         correctNumber = 0
 
 
@@ -100,6 +100,9 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
         //音ファイルをロード
         soundId1 = soundPool.load(this,R.raw.sound_correct,1)      //正解
         soundId2 = soundPool.load(this,R.raw.sound_incorrect,1)    //不正解
+
+        //タイマーの準備
+        timer = Timer()
     }
 
     //画面が見えなくなる場所
@@ -108,6 +111,8 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
 
         //音ファイルをメモリから消すrelease()メソッド
         soundPool.release()
+        //タイマーのキャンセル
+        timer.cancel()
     }
 
     //問題を出す処理をするメソッド
@@ -146,7 +151,7 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
 //        ・前の問題で入力した自分の答えを消す
         txv_answer.text = ""
 //        ・○ × 画像を見えないようにする     (viewを非表示　View.INVISIBLE、表示View.VISIBLE)
-        imageView.visibility = View.INVISIBLE
+        imageView_maru_batu.visibility = View.INVISIBLE
 
     }
 
@@ -174,7 +179,7 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
         nokorimondaisuu -= 1    //デクリメント
         txv_remaining.text = nokorimondaisuu.toString()
 //        ・○、×画像を見えるようにする
-        imageView_maru.visibility = View.VISIBLE
+        imageView_maru_batu.visibility = View.VISIBLE
 //        ・自分の入力した数字と問題の答えと比較する(if文)
         //自分の答え
         val myAnswer: Int = txv_answer.text.toString().toInt()
@@ -188,23 +193,29 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
 //        ・正解の場合→正解数を一つ増やす表示、◯画像の表示、正解音
             correctNumber += 1
             txv_correct.text = correctNumber.toString()
-            imageView_maru.setImageResource(R.drawable.pic_correct)
+            imageView_maru_batu.setImageResource(R.drawable.pic_correct)
             soundPool.play(soundId1,1.0f,1.0f,0,0,1.0f)
         }else{
 //        ・不正解の場合→×不正解数を一つ増やす、×画像の表示、不正解音
             incorrectAnswer += 1
             txv_incorrect.text = incorrectAnswer.toString()
-            imageView_maru.setImageResource(R.drawable.pic_incorrect)
+            imageView_maru_batu.setImageResource(R.drawable.pic_incorrect)
             soundPool.play(soundId2,1.0f,1.0f,0,0,1.0f)
 
         }
 
-
 //        ・問題数がなくなって終了の時→
 //        　　　　　　　もどるボタン使える、こたえあわせボタン使えない、
 //        　　　　　　　テスト終了の表示
-//        ・問題数がある場合→１秒後に次の問題を出す
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (nokorimondaisuu == 0){      //残り問題数が０になった場合
+            btn_back.isEnabled = true
+            btn_ansCheck.isEnabled = false
+            txv_msg.text = "テスト終了"
+        }else{      //・問題数がある場合→１秒後に次の問題を出す
+            timer.schedule(1000,{runOnUiThread {question()} })
+
+
+        }
     }
 
     //ボタンが押された時にやることをかく

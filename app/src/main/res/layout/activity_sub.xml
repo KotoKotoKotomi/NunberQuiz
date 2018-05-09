@@ -301,13 +301,13 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="60sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView_maru"
-        app:layout_constraintEnd_toStartOf="@+id/imageView_maru"
-        app:layout_constraintStart_toStartOf="@+id/imageView_maru"
-        app:layout_constraintTop_toTopOf="@+id/imageView_maru" />
+        app:layout_constraintBottom_toTopOf="@+id/imageView_maru_batu"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_maru_batu"
+        app:layout_constraintStart_toStartOf="@+id/imageView_maru_batu"
+        app:layout_constraintTop_toTopOf="@+id/imageView_maru_batu" />
 
     <ImageView
-        android:id="@+id/imageView_maru"
+        android:id="@+id/imageView_maru_batu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

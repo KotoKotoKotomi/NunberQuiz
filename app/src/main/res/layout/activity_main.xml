@@ -8,7 +8,7 @@
     tools:layout_editor_absoluteY="25dp">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageView_maru_batu"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="41dp"
@@ -30,8 +30,8 @@
         android:text="問題数を選択して｢スタート｣を押してください"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/spinner"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintStart_toStartOf="@+id/imageView_maru_batu"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_maru_batu" />
 
     <Spinner
         android:id="@+id/spinner"
