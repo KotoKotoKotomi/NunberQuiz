@@ -161,6 +161,7 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
     //こたえあわせ処理をするメソッド
     //こたえあわせの処理(answerCheckメソッド)
     private fun answerCheck() {
+        
 
 //        ・もどる、こたえあわせ、数字ボタンを使えなくする
         btn_back.isEnabled = false
