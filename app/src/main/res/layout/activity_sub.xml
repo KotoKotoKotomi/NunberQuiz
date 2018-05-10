@@ -300,11 +300,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="60sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView_maru_batu"
-        app:layout_constraintEnd_toStartOf="@+id/imageView_maru_batu"
-        app:layout_constraintStart_toStartOf="@+id/imageView_maru_batu"
-        app:layout_constraintTop_toTopOf="@+id/imageView_maru_batu" />
+        android:textSize="50sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tableLayout2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView_maru_batu"

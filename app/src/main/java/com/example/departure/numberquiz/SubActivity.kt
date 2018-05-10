@@ -7,6 +7,8 @@ import android.media.SoundPool
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import kotlinx.android.synthetic.main.activity_sub.*
@@ -38,7 +40,6 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var timer: Timer
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sub)
@@ -52,15 +53,15 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
 
 
         //こたえあわせボタンが押されたら
-        btn_ansCheck.setOnClickListener{
+        btn_ansCheck.setOnClickListener {
             //こたえあわせメソッドを呼ぶ
             answerCheck()
 
         }
 
         //もどるボタンが押されたら
-        btn_back.setOnClickListener{
-            val intent = Intent(this@SubActivity,MainActivity::class.java)
+        btn_back.setOnClickListener {
+            val intent = Intent(this@SubActivity, MainActivity::class.java)
             startActivity(intent)
 
         }
@@ -79,7 +80,6 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
         buttonMinus.setOnClickListener(this)
         buttonClear.setOnClickListener(this)
 
-
         //1問目を出す
         question()
 
@@ -91,18 +91,18 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
         super.onResume()
 
         //音の準備
-        soundPool = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1){
+        soundPool = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             SoundPool.Builder().setAudioAttributes(AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_MEDIA)
                     .build())
                     .setMaxStreams(1).build()
-        }else{
-            SoundPool(1,AudioManager.STREAM_MUSIC,0)
+        } else {
+            SoundPool(1, AudioManager.STREAM_MUSIC, 0)
         }
 
         //音ファイルをロード
-        soundId1 = soundPool.load(this,R.raw.sound_correct,1)      //正解
-        soundId2 = soundPool.load(this,R.raw.sound_incorrect,1)    //不正解
+        soundId1 = soundPool.load(this, R.raw.sound_correct, 1)      //正解
+        soundId2 = soundPool.load(this, R.raw.sound_incorrect, 1)    //不正解
 
         //タイマーの準備
         timer = Timer()
@@ -146,7 +146,7 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
         txv_right.text = numRight.toString()
 
 //        ・計算方法を+か-でランダム表示
-        when(random.nextInt(2) + 1){        //0から始まるので+1。１を＋、２をー
+        when (random.nextInt(2) + 1) {        //0から始まるので+1。１を＋、２をー
             1 -> txv_enzanshi.text = "+"
             2 -> txv_enzanshi.text = "-"
         }
@@ -187,35 +187,35 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
         //自分の答え
         val myAnswer: Int = txv_answer.text.toString().toInt()
         //本当の答え
-        val realAnswer: Int = if (txv_enzanshi.text == "+"){        //計算が＋だったら
+        val realAnswer: Int = if (txv_enzanshi.text == "+") {        //計算が＋だったら
             txv_left.text.toString().toInt() + txv_right.text.toString().toInt()    //左と右を足す
-        }else txv_left.text.toString().toInt() - txv_right.text.toString().toInt()       //それ以外(ー)だったら左から右を引く
+        } else txv_left.text.toString().toInt() - txv_right.text.toString().toInt()       //それ以外(ー)だったら左から右を引く
 
         //自分の答えと本当の答えを比較
-        if (myAnswer == realAnswer){        //同じ答えになった場合
+        if (myAnswer == realAnswer) {        //同じ答えになった場合
 //        ・正解の場合→正解数を一つ増やす表示、◯画像の表示、正解音
             correctNumber += 1
             txv_correct.text = correctNumber.toString()
             imageView_maru_batu.setImageResource(R.drawable.pic_correct)
-            soundPool.play(soundId1,1.0f,1.0f,0,0,1.0f)
-        }else{
+            soundPool.play(soundId1, 1.0f, 1.0f, 0, 0, 1.0f)
+        } else {
 //        ・不正解の場合→×不正解数を一つ増やす、×画像の表示、不正解音
             incorrectAnswer += 1
             txv_incorrect.text = incorrectAnswer.toString()
             imageView_maru_batu.setImageResource(R.drawable.pic_incorrect)
-            soundPool.play(soundId2,1.0f,1.0f,0,0,1.0f)
+            soundPool.play(soundId2, 1.0f, 1.0f, 0, 0, 1.0f)
 
         }
 
 //        ・問題数がなくなって終了の時→
 //        　　　　　　　もどるボタン使える、こたえあわせボタン使えない、
 //        　　　　　　　テスト終了の表示
-        if (nokorimondaisuu == 0){      //残り問題数が０になった場合
+        if (nokorimondaisuu == 0) {      //残り問題数が０になった場合
             btn_back.isEnabled = true
             btn_ansCheck.isEnabled = false
             txv_msg.text = "テスト終了"
-        }else{      //・問題数がある場合→１秒後に次の問題を出す
-            timer.schedule(1000,{runOnUiThread {question()} })
+        } else {      //・問題数がある場合→１秒後に次の問題を出す
+            timer.schedule(1000, { runOnUiThread { question() } })
 
 
         }
@@ -230,17 +230,17 @@ class SubActivity : AppCompatActivity(), View.OnClickListener {
         val button: Button = v as Button    //button(1〜9,-,c)   vをButton型に
 
 
-        when(v?.id){
-            //クリアボタンで消す
+        when (v?.id) {
+        //クリアボタンで消す
             R.id.buttonClear -> txv_answer.text = ""
-            //一文字目にーをおす時は
-            R.id.buttonMinus -> if (txv_answer.text == "")      //先頭が空白""だった場合
-                                    txv_answer.text = "-"       //ーを押せる
-            //一文字目に０をおす時は
+        //一文字目にーをおす時は
+            R.id.buttonMinus -> if (txv_answer.text.isEmpty())      //先頭が空白""だった場合
+                txv_answer.text = "-" //ーを押せる
+        //一文字目に０をおす時は
             R.id.button0 -> if (txv_answer.text != "0" && txv_answer.text != "-")   //０じゃない　かつ　ーじゃない場合
                 txv_answer.append(button.text)                  //１〜９は押せる　appendは後ろにつける
 
-            //それ以外
+        //それ以外
             else -> txv_answer.append(button.text)          //１〜９を後ろに足してく
         }
     }
